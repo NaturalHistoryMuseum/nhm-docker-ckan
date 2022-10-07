@@ -3,6 +3,7 @@ FROM ubuntu:bionic
 ENV CKAN_VARIETY="ckan"
 ENV CKAN_BRANCH="ckan-2.9.5"
 ENV PYTHON_VERSION="3.8"
+ENV NODE_VERSION="15"
 
 RUN DEBIAN_FRONTEND=noninteractive && \
     apt-get -q -y update && \
@@ -36,26 +37,31 @@ RUN DEBIAN_FRONTEND=noninteractive && \
     && rm -rf /var/lib/apt/lists/*
 
 # install nodejs
-RUN curl -sL https://deb.nodesource.com/setup_15.x | bash && \
-    apt-get install -q -y nodejs
+RUN curl -sL "https://deb.nodesource.com/setup_${NODE_VERSION}.x" | bash && \
+    apt-get install -q -y nodejs && \
+    npm update -g npm
 
 # we're gonna use a venv for a couple of reasons. Firstly, it avoids any OS level python package
 # clashes/dependencies. Secondly, it matches how we run stuff on the live servers. And finally, it
 # means we can use a different version of python3 to the one shipped with ubuntu 18.04.
 # For info on the next 3 lines: https://pythonspeed.com/articles/activate-virtualenv-dockerfile/
 ENV VIRTUAL_ENV=/venv
-RUN python${PYTHON_VERSION} -m venv $VIRTUAL_ENV
+RUN "python${PYTHON_VERSION}" -m venv $VIRTUAL_ENV
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 RUN pip install -U pip && pip install wheel
 
 RUN mkdir -p /base/data/ckan/storage && \
-    mkdir -p /base/src/ckan
+    mkdir -p /base/src/ckan && \
+    mkdir -p /opt/waits
+
+COPY waits/ /opt/waits/
 
 WORKDIR /base/src/ckan
 
 # setup ckan and its dependencies
-RUN git clone -b ${CKAN_BRANCH} https://github.com/${CKAN_VARIETY}/ckan.git . && \
+RUN git clone "https://github.com/${CKAN_VARIETY}/ckan.git" . && \
+    git checkout "${CKAN_BRANCH}" && \
     pip install -r requirement-setuptools.txt && \
     pip install -r requirements.txt && \
     pip install -r dev-requirements.txt && \
@@ -67,7 +73,7 @@ RUN pip install pytest-ckan
 
 # this entrypoint ensures our service dependencies (postgresql, solr and redis) are running before
 # running the cmd
-ENTRYPOINT ["/bin/bash", "docker/entrypoint.sh"]
+ENTRYPOINT ["/bin/bash", "/opt/waits/basic.sh"]
 
 # run the tests with coverage output
 CMD ["pytest", "--ckan-ini=test.ini", "tests"]
