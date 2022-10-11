@@ -14,3 +14,6 @@ The docker image:
 The CKAN base is installed in `/base/src/ckan`.
 
 Python3.8 is installed in `/venv` but is available as just `python` (as is `pip`).
+
+### Usage
+Start your `Dockerfile` with `FROM naturalhistorymuseum/ckantest:0.1` to use this image.
