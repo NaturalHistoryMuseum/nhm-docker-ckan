@@ -75,5 +75,5 @@ RUN pip install pytest-ckan
 # running the cmd
 ENTRYPOINT ["/bin/bash", "/opt/waits/basic.sh"]
 
-# run the tests with coverage output
-CMD ["pytest", "--ckan-ini=test.ini", "tests"]
+# run the tests
+CMD ["bash", "/opt/scripts/run-tests.sh"]
