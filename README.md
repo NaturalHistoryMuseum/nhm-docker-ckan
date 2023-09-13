@@ -20,14 +20,11 @@ There are two versions of the docker image available, one for CKAN 2.9.x and one
 2.10.x.
 
 ### Tags and Usage
-Depending on the version of CKAN you want to use, select the appropriate tag.
+Depending on the version of CKAN you want to use, select the appropriate tag:
 
 - `latest` is latest CKAN 2.9.9
 - `2.9` is latest CKAN 2.9.x, currently 2.9.9
 - `2.10` is latest CKAN 2.10.x, currently 2.10.1
-
-In addition to these tags, a tag for each CKAN version available is present.
-E.g. `2.9.9` allows access to 
 
 To use any of these tags just start your `Dockerfile` with `FROM naturalhistorymuseum/ckantest:<tag>`.
 
