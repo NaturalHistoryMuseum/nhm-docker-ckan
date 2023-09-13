@@ -55,8 +55,8 @@ RUN mkdir -p /base/data/ckan/storage && \
     mkdir -p /base/src/ckan && \
     mkdir -p /opt/waits
 
-COPY waits/ /opt/waits/
-COPY scripts /opt/scripts/
+COPY ./ckantest/common/waits /opt/waits/
+COPY ./ckantest/common/scripts /opt/scripts/
 
 WORKDIR /base/src/ckan
 
