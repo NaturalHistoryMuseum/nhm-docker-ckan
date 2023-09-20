@@ -25,6 +25,11 @@ Depending on the version of CKAN you want to use, select the appropriate tag:
 - `latest` is latest CKAN 2.9.x, currently 2.9.9
 - `next` is latest CKAN 2.10.x, currently 2.10.1
 
+All other tags will match the releases of this repository.
+The version of CKAN in each of these images will be the same as the version
+of `latest` at the time of the release.
+E.g. at the moment, they will all be 2.9.x.
+
 To use any of these tags just start your `Dockerfile` with `FROM naturalhistorymuseum/ckantest:<tag>`.
 
 
