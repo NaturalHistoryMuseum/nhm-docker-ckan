@@ -1,7 +1,7 @@
 FROM ubuntu:bionic
 
 ENV CKAN_VARIETY="ckan"
-ENV CKAN_BRANCH="ckan-2.9.9"
+ENV CKAN_BRANCH="ckan-2.10.1"
 ENV PYTHON_VERSION="3.8"
 ENV NODE_VERSION="15"
 
@@ -55,8 +55,8 @@ RUN mkdir -p /base/data/ckan/storage && \
     mkdir -p /base/src/ckan && \
     mkdir -p /opt/waits
 
-COPY waits/ /opt/waits/
-COPY scripts /opt/scripts/
+COPY ./ckantest/common/waits /opt/waits/
+COPY ./ckantest/common/scripts /opt/scripts/
 
 WORKDIR /base/src/ckan
 
@@ -67,7 +67,7 @@ RUN git clone "https://github.com/${CKAN_VARIETY}/ckan.git" . && \
     pip install -r requirements.txt && \
     pip install -r dev-requirements.txt && \
     pip install -e . && \
-    npm install . --only=prod
+    npm install .
 
 # fixes this https://github.com/ckan/ckan/issues/5570
 RUN pip install pytest-ckan
